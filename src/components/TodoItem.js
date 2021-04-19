@@ -1,26 +1,33 @@
 import Button from "./Button";
 import PropTypes from "prop-types";
+import SkeletonLoading from "./SkeletonLoading";
 
-const TodoItem = ({ todo, del, open }) => {
+const TodoItem = ({ todo, del, open, loading }) => {
   const delById = (id) => {
     del(id);
   };
   return (
-    <div style={todoItem}>
-      <p>{todo.title}</p>
-      <div>
-        <Button
-          text="edit"
-          variant="success"
-          action={() => open(todo.id, todo.title)}
-        />
-        <Button
-          text="delete"
-          variant="warning"
-          action={() => delById(todo.id)}
-        />
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <SkeletonLoading />
+      ) : (
+        <div style={todoItem}>
+          <p>{todo.title}</p>
+          <div>
+            <Button
+              text="edit"
+              variant="success"
+              action={() => open(todo._id, todo.title)}
+            />
+            <Button
+              text="delete"
+              variant="warning"
+              action={() => delById(todo._id)}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -28,7 +35,7 @@ export default TodoItem;
 
 TodoItem.propTypes = {
   todo: PropTypes.object.isRequired,
-  del: PropTypes.func.isRequired,
+  // del: PropTypes.func.isRequired,
 };
 
 const todoItem = {

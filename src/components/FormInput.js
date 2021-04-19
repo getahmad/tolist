@@ -1,43 +1,49 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Button from "./Button";
 import "../assets/css/formInput.css";
+import axios from "axios";
+const baseUrl="https://my-udemy-api.herokuapp.com/api/v1"
 
-export default class FormInput extends Component {
-  state = {
-    text: "",
+const FormInput = ({ add }) => {
+  const [text, setText] = useState("");
+
+  const change = (e) => {
+    setText(e.target.value);
   };
 
-  change = (e) => {
-    this.setState({
-      text: e.target.value,
-    });
-  };
-
-  submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (this.state.text !== "") {
-      this.props.add(this.state.text);
+    const newTodo={
+      title:text,
+    };
+    const token= localStorage.getItem("token")
+    if (text !== "") {
+      const res = await axios.post(`${baseUrl}/todo`,newTodo,{
+        headers: {
+          "Authorization":token
+        }
+      })
+      // console.log(res);
+      add(res.data.todo);
     }
-    this.setState({
-      text: "",
-    });
+    setText("");
   };
 
-  render() {
-    return (
-      <form style={inputFrom} onSubmit={this.submit}>
-        <input
-          onChange={this.change}
-          type="text"
-          value={this.state.text}
-          placeholder="Add Task"
-          style={input}
-        />
-        <Button text="add" variant="primary" action={this.submit} />
-      </form>
-    );
-  }
-}
+  return (
+    <form style={inputFrom} onSubmit={submit}>
+      <input
+        onChange={change}
+        type="text"
+        value={text}
+        placeholder="Add Task"
+        style={input}
+      />
+      <Button text="add" variant="primary" action={submit} />
+    </form>
+  );
+};
+
+export default FormInput;
 
 const inputFrom = {
   background: "#ffffff",
