@@ -16,7 +16,7 @@ const Task = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [editData, setEditData] = useState({
     id: "",
-    title: "",
+    // title: "",
   });
 
   const update = () => {
@@ -39,11 +39,12 @@ const Task = () => {
     });
   };
 
-  const openModal = (id, data) => {
+  const openModal = (id, title) => {
+    console.log(id,title);
     setIsEdit(true);
     setEditData({
       id,
-      title: data,
+      title: title,
     });
   };
 

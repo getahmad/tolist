@@ -1,85 +1,34 @@
-import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { AuthContext } from "../context/auth";
+import { loginAuth } from "../store/actions/auth";
 
 const Auth = () => {
-  const { isAuthenticated, loginSuccess, loginFailed } = useContext(
-    AuthContext
+  const { isAuthenticated, isLoading, errors } = useSelector(
+    (state) => state.auth
   );
+  const dispatch = useDispatch();
+
   const [login, setLogin] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [isError, setIsError] = useState(false);
 
   const isLogin = () => setLogin(!login);
   const baseUrl = "https://my-udemy-api.herokuapp.com/api/v1";
 
   const userLogin = async () => {
-    setIsLoading(true);
-    const user = {
-      email,
-      password,
-    };
-    try {
-      const res = await axios.post(`${baseUrl}/user/signin`, user);
-      localStorage.setItem("token", res.data.token);
-      setEmail("");
-      setPassword("");
-      setIsLoading(false);
-      loginSuccess();
-    } catch (error) {
-      setIsError(true);
-      setError(error.response.data.errors);
-      setIsLoading(false);
-      setEmail("");
-      setPassword("");
-      setTimeout(() => {
-        setIsError(false);
-        setError("");
-        loginFailed();
-      }, 2000);
-    }
+    const user = { email, password };
+    dispatch(loginAuth(user));
   };
+
+  const userRegister = async () => {};
 
   if (isAuthenticated) {
     return <Redirect to="/task" />;
   }
-
-  const userRegister = async () => {
-    setIsLoading(true);
-    const user = {
-      name,
-      email,
-      password,
-    };
-    try {
-      const res = await axios.post(`${baseUrl}/user/signup`, user);
-      localStorage.setItem("token", res.data.token);
-      setName("");
-      setEmail("");
-      setPassword("");
-      loginSuccess();
-      setIsLoading(false);
-    } catch (error) {
-      setIsError(true);
-      setError(error.response.data.errors);
-      setIsLoading(false);
-      setName("");
-      setEmail("");
-      setPassword("");
-      setTimeout(() => {
-        setIsError(false);
-        setError("");
-        loginFailed();
-      }, 2000);
-    }
-  };
 
   return (
     <div style={box}>
@@ -108,16 +57,15 @@ const Auth = () => {
       </div>
 
       <div style={btn}>
-        {isError && (
-          <div>
-            {error &&
-              error.map((item, index) => (
-                <p style={{ margin: "0.34rem 0", color: "red" }} key={index}>
-                  {item.msg}
-                </p>
-              ))}
-          </div>
-        )}
+        <div>
+          {errors &&
+            errors.map((item, index) => (
+              <p style={{ margin: "0.34rem 0", color: "red" }} key={index}>
+                {item.msg}
+              </p>
+            ))}
+        </div>
+
         <Button
           action={login ? userLogin : userRegister}
           variant="primary"
