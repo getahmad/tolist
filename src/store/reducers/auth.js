@@ -1,5 +1,5 @@
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: true,
   isLoading: false,
   errors: null,
 };
@@ -8,8 +8,9 @@ const auth = (state = initialState, action) => {
   switch (action.type) {
     default:
       return state;
-    case "AUTH_REQUEST":
-      return {
+    case "LOGIN" :
+    case "REGISTER":
+    return {
         ...state,
         isLoading: true,
       };
@@ -19,6 +20,24 @@ const auth = (state = initialState, action) => {
         isLoading: false,
         errors: null,
       };
+    case "AUTH_FAILED":
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+        errors: action.payload,
+      };
+    case "AUTH_REMOVE_ERRORS":
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+        errors: null,
+      };
+    case "LOGOUT":
+      return{
+        isAuthenticated:false,
+      }
   }
 };
 

@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./context/auth";
+// import { AuthProvider } from "./context/auth";
 import Routes from "./routes/Routes";
 
 const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <AuthProvider>
+        {/* <AuthProvider> */}
           <Routes />
-        </AuthProvider>
+        {/* </AuthProvider> */}
       </BrowserRouter>
     </div>
   );

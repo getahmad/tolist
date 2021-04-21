@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { loginAuth } from "../store/actions/auth";
+import { loginAuth, registerAuth } from "../store/actions/auth";
+// import { checkLogin } from "../utils/Helper";
 
 const Auth = () => {
   const { isAuthenticated, isLoading, errors } = useSelector(
@@ -11,30 +12,37 @@ const Auth = () => {
   );
   const dispatch = useDispatch();
 
-  const [login, setLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const isLogin = () => setLogin(!login);
-  const baseUrl = "https://my-udemy-api.herokuapp.com/api/v1";
+  const regis = () => setIsLogin(!isLogin);
 
   const userLogin = async () => {
     const user = { email, password };
     dispatch(loginAuth(user));
+    setEmail("");
+    setPassword("");
   };
 
-  const userRegister = async () => {};
+  const userRegister = async () => {
+    const user = { email, password, name };
+    dispatch(registerAuth(user));
+    setEmail("");
+    setPassword("");
+    setName("");
+  };
 
-  if (isAuthenticated) {
+  if (isAuthenticated ) {
     return <Redirect to="/task" />;
-  }
+  } 
 
   return (
     <div style={box}>
-      <h3 style={head}>{login ? "login" : "register"}</h3>
+      <h3 style={head}>{isLogin ? "Login" : "register"}</h3>
       <div>
-        {!login && (
+        {!isLogin && (
           <Input
             type="text"
             value={name}
@@ -67,18 +75,18 @@ const Auth = () => {
         </div>
 
         <Button
-          action={login ? userLogin : userRegister}
+          action={isLogin ? userLogin : userRegister}
           variant="primary"
           load={isLoading}
-          text={login ? "Login" : "Register"}
+          text={isLogin ? "Login" : "Register"}
         />
       </div>
 
-      {login ? (
+      {isLogin ? (
         <div style={paragraph}>
           <p>
             Belum punya akun? silahkan{" "}
-            <span style={textBtn} onClick={isLogin}>
+            <span style={textBtn} onClick={regis}>
               register
             </span>
           </p>
@@ -87,8 +95,8 @@ const Auth = () => {
         <div style={paragraph}>
           <p>
             sudah punya akun? silahkan{" "}
-            <span style={textBtn} onClick={isLogin}>
-              login
+            <span style={textBtn} onClick={regis}>
+              Login
             </span>
           </p>
         </div>

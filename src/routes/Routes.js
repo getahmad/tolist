@@ -7,8 +7,8 @@ import PrivateRoutes from "./PrivateRoutes";
 const Routes = () => {
   return (
     <>
-      <Route exact path="/" component={Auth} />
       <PrivateRoutes exact path="/task" component={Task} />
+      <Route exact path="/" component={Auth} />
     </>
   );
 };

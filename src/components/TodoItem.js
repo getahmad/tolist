@@ -1,32 +1,27 @@
 import Button from "./Button";
 import PropTypes from "prop-types";
-import SkeletonLoading from "./SkeletonLoading";
 
-const TodoItem = ({ todo, del, open, loading }) => {
+const TodoItem = ({ todo, del, open }) => {
   const delById = (id) => {
     del(id);
   };
   return (
     <>
-      {loading ? (
-        <SkeletonLoading />
-      ) : (
-        <div style={todoItem}>
-          <p>{todo.title}</p>
-          <div>
-            <Button
-              text="edit"
-              variant="success"
-              action={() => open(todo._id, todo.title)}
-            />
-            <Button
-              text="delete"
-              variant="warning"
-              action={() => delById(todo._id)}
-            />
-          </div>
+      <div style={todoItem}>
+        <p>{todo.title}</p>
+        <div>
+          <Button
+            text="edit"
+            variant="success"
+            action={() => open(todo._id, todo.title)}
+          />
+          <Button
+            text="delete"
+            variant="warning"
+            action={() => delById(todo._id)}
+          />
         </div>
-      )}
+      </div>
     </>
   );
 };

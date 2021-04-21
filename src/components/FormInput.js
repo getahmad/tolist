@@ -1,30 +1,25 @@
 import React, { useState } from "react";
 import Button from "./Button";
 import "../assets/css/formInput.css";
-import axios from "axios";
-const baseUrl="https://my-udemy-api.herokuapp.com/api/v1"
+import { useDispatch } from "react-redux";
+import { addTask } from "../store/actions/task";
 
-const FormInput = ({ add }) => {
+
+const FormInput = () => {
+  const dispatch = useDispatch();
   const [text, setText] = useState("");
 
   const change = (e) => {
     setText(e.target.value);
   };
 
-  const submit = async (e) => {
+  const submit =  (e) => {
     e.preventDefault();
-    const newTodo={
+    const data={
       title:text,
     };
-    const token= localStorage.getItem("token")
     if (text !== "") {
-      const res = await axios.post(`${baseUrl}/todo`,newTodo,{
-        headers: {
-          "Authorization":token
-        }
-      })
-      // console.log(res);
-      add(res.data.todo);
+      dispatch(addTask(data))
     }
     setText("");
   };

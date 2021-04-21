@@ -1,6 +1,14 @@
-import {all} from "redux-saga/effects"
-import {watchLogin} from "./auth"
+import { all } from "redux-saga/effects";
+import { watchLogin, watchRegister } from "./auth";
+import { watchGet, watchDel, watchAdd, watchEdit } from "./task";
 
-export default function* rootSaga(){
-    yield all([watchLogin()])
+export default function* rootSaga() {
+  yield all([
+    watchLogin(),
+    watchRegister(),
+    watchGet(),
+    watchDel(),
+    watchAdd(),
+    watchEdit(),
+  ]);
 }

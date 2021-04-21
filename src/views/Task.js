@@ -1,34 +1,30 @@
-import React, { useEffect, useState,useContext } from "react";
-import {AuthContext} from "../context/auth"
+import React, { useEffect, useState } from "react";
 import FormInput from "../components/FormInput";
 import TodoItem from "../components/TodoItem";
 import EditModal from "../components/EditModal";
 import Logo from "../assets/images/logo.png";
 import "../assets/css/styles.css";
-import axios from "axios";
 import Button from "../components/Button";
-const baseUrl = "https://my-udemy-api.herokuapp.com/api/v1";
+import { useDispatch, useSelector } from "react-redux";
+import { getTask, delTask, editTask } from "../store/actions/task";
+import SkeletonLoading from "../components/SkeletonLoading";
+import { logout } from "../store/actions/auth";
 
 const Task = () => {
-  const {logout}=useContext(AuthContext)
-  const [todos, setTodos] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
+  const { todos, isLoading } = useSelector((state) => state.task);
+  const dispatch = useDispatch();
+  const [modalEdit, setModalEdit] = useState(false);
   const [editData, setEditData] = useState({
     id: "",
-    // title: "",
+    title: "",
   });
 
-  const update = () => {
-    const { id, title } = editData;
-    const newData = { id, title };
-    const newTodos = todos;
-    newTodos.splice(id - 1, 1, newData);
-    setTodos(newTodos);
-    setIsEdit(false);
+  const openModal = (id, title) => {
+    // console.log(id, title);
+    setModalEdit(true);
     setEditData({
-      id: "",
-      title: "",
+      id,
+      title: title,
     });
   };
 
@@ -39,84 +35,70 @@ const Task = () => {
     });
   };
 
-  const openModal = (id, title) => {
-    console.log(id,title);
-    setIsEdit(true);
-    setEditData({
+  const update = (e) => {
+    e.preventDefault();
+    const { id, title } = editData;
+    // const setTodos=""
+    // const newData = { id, title };
+    // const newTodos = todos;
+
+    const data = {
       id,
       title: title,
-    });
+    };
+    if (title !== "") {
+      dispatch(editTask(data));
+    }
+    // newTodos.splice(id - 1, 1, newData);
+    // setTodos(newTodos);
+    setModalEdit(false);
   };
 
   const closeModal = () => {
-    setIsEdit(false);
+    setModalEdit(false);
   };
 
-  const deleteTask = async (id) => {
-    // setLoading(true);
-    const token = localStorage.getItem("token");
-    await axios.get(`${baseUrl}/todo/${id}`, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    // setTodos(res.data);
-    // setTimeout(() => {
-    //   setLoading(false);
-    // }, 2000);
-    setTodos(todos.filter((item) => item._id !== id));
-  };
-
-  const addTask = (data) => {
-    // const id = todos.length;
-    // const newData = {
-    //   id: id + 1,
-    //   title: data,
-    // };
-    setTodos([...todos, data]);
-  };
-
-  const getData = async () => {
-    setLoading(true);
-    const token = localStorage.getItem("token");
-    const res = await axios.get(`${baseUrl}/todo`, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    setTodos(res.data.todos);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+  const deleteTask = (id) => {
+    dispatch(delTask(id));
   };
 
   useEffect(() => {
-    getData();
-  }, []);
+    dispatch(getTask());
+  }, [dispatch]);
+
+  const logoutUser = () => {
+    dispatch(logout());
+    localStorage.removeItem("token");
+  };
 
   return (
     <div className="app">
       <div className="logo">
         <img src={Logo} alt="" />
         <h3>Task List</h3>
-        <Button variant="primary" text="logout" action={logout} />
+        <Button variant="primary" text="logout" action={logoutUser} />
       </div>
       <div className="list">
-        {todos.map((item, index) => (
-          <TodoItem
-            key={index}
-            todo={item}
-            del={deleteTask}
-            open={openModal}
-            loading={loading}
-          />
-        ))}
+        {isLoading ? (
+          <SkeletonLoading />
+        ) : (
+          <>
+            {todos.map((item, index) => (
+              <TodoItem
+                key={index}
+                todo={item}
+                del={deleteTask}
+                open={openModal}
+              />
+            ))}
+          </>
+        )}
       </div>
       <div className="input-form">
-        <FormInput add={addTask} />
+        <FormInput />
       </div>
       <EditModal
-        edit={isEdit}
+        edit={modalEdit}
         close={closeModal}
         change={setTitle}
         data={editData}
