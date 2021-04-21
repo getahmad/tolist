@@ -17,8 +17,6 @@ export const addTask = (todo) => {
 };
 
 export const editTask = (todo) => {
-  // console.log(todo);
-  // console.log("ok");
   return {
     type: "EDIT_TASK_REQUEST",
     payload: todo,

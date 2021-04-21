@@ -49,7 +49,6 @@ function* add(actions) {
 }
 
 function* edit(actions) {
-  // console.log(actions);
   const { payload } = actions;
 
   const token = localStorage.getItem("token");
@@ -59,7 +58,6 @@ function* edit(actions) {
         Authorization: token,
       },
     });
-    console.log(res.data);
     yield put({ type: "EDIT_SUCCESS", payload: res.data.todo });
   } catch (e) {
     console.log(e);

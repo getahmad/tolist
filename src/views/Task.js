@@ -20,7 +20,6 @@ const Task = () => {
   });
 
   const openModal = (id, title) => {
-    // console.log(id, title);
     setModalEdit(true);
     setEditData({
       id,
@@ -38,10 +37,6 @@ const Task = () => {
   const update = (e) => {
     e.preventDefault();
     const { id, title } = editData;
-    // const setTodos=""
-    // const newData = { id, title };
-    // const newTodos = todos;
-
     const data = {
       id,
       title: title,
@@ -49,8 +44,6 @@ const Task = () => {
     if (title !== "") {
       dispatch(editTask(data));
     }
-    // newTodos.splice(id - 1, 1, newData);
-    // setTodos(newTodos);
     setModalEdit(false);
   };
 

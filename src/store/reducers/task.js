@@ -31,8 +31,7 @@ const task = (state = initialState, action) => {
     case "EDIT_SUCCESS":
       return {
         isLoading: false,
-        todos: state.todos.splice(action.payload, 1),
-        //  todos: [...state.todos, action.payload]
+        todos: [...state.todos, action.payload],
       };
   }
 };
