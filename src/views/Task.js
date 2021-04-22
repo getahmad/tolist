@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import FormInput from "../components/FormInput";
 import TodoItem from "../components/TodoItem";
 import EditModal from "../components/EditModal";
+import DeleteModal from "../components/DeleteModal";
 import Logo from "../assets/images/logo.png";
 import "../assets/css/styles.css";
 import Button from "../components/Button";
@@ -18,8 +19,12 @@ const Task = () => {
     id: "",
     title: "",
   });
+  const [modalDelete,setModalDelete] = useState(false)
+  const [delData,setDelData]=useState({
+    id:""
+  })
 
-  const openModal = (id, title) => {
+  const openModalEdit = (id, title) => {
     setModalEdit(true);
     setEditData({
       id,
@@ -47,12 +52,23 @@ const Task = () => {
     setModalEdit(false);
   };
 
-  const closeModal = () => {
+  const closeModalEdit = () => {
     setModalEdit(false);
   };
 
-  const deleteTask = (id) => {
-    dispatch(delTask(id));
+  const openModalDelete = (id) => {
+    setModalDelete(true);
+    setDelData({id})
+  };
+
+  const closeModalDelete = () => {
+    setModalDelete(false);
+  }
+
+
+  const deleteTask = () => {
+    dispatch(delTask(delData.id));
+    setModalDelete(false);
   };
 
   useEffect(() => {
@@ -80,8 +96,9 @@ const Task = () => {
               <TodoItem
                 key={index}
                 todo={item}
-                del={deleteTask}
-                open={openModal}
+                // del={deleteTask}
+                openModalDel={openModalDelete}
+                open={openModalEdit}
               />
             ))}
           </>
@@ -92,10 +109,15 @@ const Task = () => {
       </div>
       <EditModal
         edit={modalEdit}
-        close={closeModal}
+        close={closeModalEdit}
         change={setTitle}
         data={editData}
         update={update}
+      />
+      <DeleteModal
+      close={closeModalDelete}
+      del={deleteTask}
+      delDataTodo={modalDelete}
       />
     </div>
   );

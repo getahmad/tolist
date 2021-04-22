@@ -1,9 +1,7 @@
 import Button from "./Button";
 import "../assets/css/EditModal.css";
-// import { useDispatch } from "react-redux";
 
 const EditModal = ({ edit, close, data, change, update }) => {
-  //  const dispatch=useDispatch()
 
   if (edit) {
     return (

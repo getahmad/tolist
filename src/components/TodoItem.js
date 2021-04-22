@@ -1,10 +1,8 @@
 import Button from "./Button";
 import PropTypes from "prop-types";
 
-const TodoItem = ({ todo, del, open }) => {
-  const delById = (id) => {
-    del(id);
-  };
+const TodoItem = ({ todo, open,openModalDel }) => {
+
   return (
     <>
       <div style={todoItem}>
@@ -18,7 +16,7 @@ const TodoItem = ({ todo, del, open }) => {
           <Button
             text="delete"
             variant="warning"
-            action={() => delById(todo._id)}
+            action={() =>openModalDel(todo._id)}
           />
         </div>
       </div>

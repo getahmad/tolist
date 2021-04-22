@@ -9,6 +9,8 @@ const task = (state = initialState, action) => {
     default:
       return state;
     case "TASK_REQUEST":
+    case "ADD_TASK_REQUEST":
+    case "DELETE_TASK_REQUEST":
       return {
         ...state,
         isLoading: true,
@@ -31,7 +33,7 @@ const task = (state = initialState, action) => {
     case "EDIT_SUCCESS":
       return {
         isLoading: false,
-        todos: [...state.todos, action.payload],
+        todos: action.payload,
       };
   }
 };
