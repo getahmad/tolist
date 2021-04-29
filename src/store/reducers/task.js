@@ -11,6 +11,7 @@ const task = (state = initialState, action) => {
     case "TASK_REQUEST":
     case "ADD_TASK_REQUEST":
     case "DELETE_TASK_REQUEST":
+    case "EDIT_TASK_REQUEST":
       return {
         ...state,
         isLoading: true,
@@ -31,9 +32,13 @@ const task = (state = initialState, action) => {
         todos: [...state.todos, action.payload],
       };
     case "EDIT_SUCCESS":
+      const findTodos = state.todos.findIndex(
+        (x) => x._id === action.payload._id
+      );
+      state.todos.splice(findTodos, 1, action.payload);
       return {
         isLoading: false,
-        todos: action.payload,
+        todos: state.todos,
       };
   }
 };

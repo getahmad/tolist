@@ -32,6 +32,7 @@ const FormInput = () => {
         value={text}
         placeholder="Add Task"
         style={input}
+        required
       />
       <Button text="add" variant="primary" action={submit} />
     </form>

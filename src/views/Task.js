@@ -44,7 +44,7 @@ const Task = () => {
     const { id, title } = editData;
     const data = {
       id,
-      title: title,
+      title,
     };
     if (title !== "") {
       dispatch(editTask(data));

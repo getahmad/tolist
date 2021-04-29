@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put,  takeEvery,  takeLatest } from "redux-saga/effects";
 import axios from "axios";
 const baseUrl = "https://my-udemy-api.herokuapp.com/api/v1/todo";
 
@@ -45,6 +45,8 @@ function* add(actions) {
     yield put({ type: "ADD_SUCCESS", payload: res.data.todo });
   } catch (e) {
     console.log(e);
+    const errors= e.response.data.errors
+    console.log(errors);
   }
 }
 
@@ -65,14 +67,14 @@ function* edit(actions) {
 }
 
 export function* watchGet() {
-  yield takeEvery("TASK_REQUEST", get);
+  yield takeLatest("TASK_REQUEST", get);
 }
 export function* watchDel() {
-  yield takeEvery("DELETE_TASK_REQUEST", del);
+  yield takeLatest("DELETE_TASK_REQUEST", del);
 }
 export function* watchAdd() {
   yield takeEvery("ADD_TASK_REQUEST", add);
 }
 export function* watchEdit() {
-  yield takeEvery("EDIT_TASK_REQUEST", edit);
+  yield takeLatest("EDIT_TASK_REQUEST", edit);
 }
