@@ -23,16 +23,16 @@ const Auth = () => {
   const userLogin = async () => {
     const user = { email, password };
     dispatch(loginAuth(user));
-    setEmail("");
-    setPassword("");
+    // setEmail("");
+    // setPassword("");
   };
 
   const userRegister = async () => {
     const user = { email, password, name };
     dispatch(registerAuth(user));
-    setEmail("");
-    setPassword("");
-    setName("");
+    // setEmail("");
+    // setPassword("");
+    // setName("");
   };
 
   if (isAuthenticated ) {
